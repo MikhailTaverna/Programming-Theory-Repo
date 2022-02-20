@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public Text scoreText;
+    public GameObject gameOverScreen;
     public GameObject[] chickenPrefabs;
     public GameObject dogPrefab;
     public bool isGameActive = false;
@@ -46,7 +48,7 @@ public class GameManager : MonoBehaviour
     {
         while (isGameActive)
         {
-            yield return new WaitForSeconds(1);            
+            yield return new WaitForSeconds(3);            
             Instantiate(dogPrefab, GenerateRandomDogPosition(), dogPrefab.transform.rotation);
         }
     }
@@ -67,5 +69,13 @@ public class GameManager : MonoBehaviour
     {
         score += points;
         scoreText.text = $"Score: {score}";
+    }
+    public void GameOver()
+    {
+        gameOverScreen.SetActive(true);
+    }
+    public void Restart()
+    {
+        SceneManager.LoadScene(1);
     }
 }

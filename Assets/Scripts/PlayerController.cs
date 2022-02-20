@@ -26,10 +26,13 @@ public class PlayerController : MonoBehaviour
     }
     void Move()
     {
-        verticalInput = Input.GetAxis("Vertical");
-        horizontalInput = Input.GetAxis("Horizontal");
-        transform.Translate(Vector3.forward * speed * verticalInput * Time.deltaTime);
-        transform.Translate(Vector3.right * speed * horizontalInput * Time.deltaTime);
+        if (gameManager.isGameActive)
+        {
+            verticalInput = Input.GetAxis("Vertical");
+            horizontalInput = Input.GetAxis("Horizontal");
+            //transform.Translate(Vector3.forward * speed * verticalInput * Time.deltaTime);
+            transform.Translate(Vector3.right * speed * horizontalInput * Time.deltaTime);
+        }
     }
     void BoundaryCheck()
     {
@@ -52,16 +55,21 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Food"))
+        if (gameManager.isGameActive)
         {
-            Debug.Log("Player ate chicken");
-            Destroy(other.gameObject);
-            gameManager.AddScore(other.gameObject.GetComponent<MoveEnemyChickens>().points);
-        }
-        else if (other.gameObject.CompareTag("Enemy"))
-        {
-            Debug.Log("Game Over");
-            Destroy(other.gameObject);
+            if (other.gameObject.CompareTag("Food"))
+            {
+                Debug.Log("Player ate chicken");
+                Destroy(other.gameObject);
+                gameManager.AddScore(other.gameObject.GetComponent<MoveEnemyChickens>().points);
+            }
+            else if (other.gameObject.CompareTag("Enemy"))
+            {
+                Debug.Log("Game Over");
+                Destroy(other.gameObject);
+                gameManager.isGameActive = false;
+                gameManager.GameOver();
+            }
         }
     }
 }

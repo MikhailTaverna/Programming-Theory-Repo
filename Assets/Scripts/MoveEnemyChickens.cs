@@ -21,7 +21,7 @@ public class MoveEnemyChickens : AbstactEnemyClass
     }
     protected override void Move()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        transform.Translate(Vector3.back * speed * Time.deltaTime);
     }
     protected override void BoundaryCheck()
     {
