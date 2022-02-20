@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
+    private GameManager gameManager;
     private float verticalInput;
     private float horizontalInput;
     [SerializeField] float speed;
@@ -13,14 +14,15 @@ public class PlayerController : MonoBehaviour
     private float lowerBound = -6;
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
-        BoundaryCheck();
+        Move(); //ABSTRACTION
+        BoundaryCheck(); //ABSTRACTION
     }
     void Move()
     {
@@ -46,6 +48,20 @@ public class PlayerController : MonoBehaviour
         if (transform.position.z < lowerBound)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, lowerBound);
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Food"))
+        {
+            Debug.Log("Player ate chicken");
+            Destroy(other.gameObject);
+            gameManager.AddScore(other.gameObject.GetComponent<MoveEnemyChickens>().points);
+        }
+        else if (other.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Game Over");
+            Destroy(other.gameObject);
         }
     }
 }
